@@ -1,0 +1,7 @@
+{
+    "batch_size" : 150000,
+    "dt" : 0.5,
+    "w_fVIX" : 30,
+    "w_CVIX" : 2,
+    "w_SPX" : 3
+}
