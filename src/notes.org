@@ -1,0 +1,19 @@
+* ./train.py --date "2021/10/01" --maturities maturities.json --model model.py --params params.json
+
+* model.py
+
+#+BEGIN_SRC python
+
+  class Model
+
+  def loss_func
+
+#+END_SRC
+
+#+BEGIN_SRC python
+
+  load_data
+  train
+
+#+END_SRC
+
