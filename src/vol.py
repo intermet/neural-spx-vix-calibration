@@ -3,6 +3,7 @@ import torch
 Rho_min = torch.tensor(-0.99999, device="cuda:0")
 Rho_max = torch.tensor(+0.99999, device="cuda:0")
 
+
 def V_and_MuY_rho_tanh(model, alpha=1):
     def V_and_MuY(tXY):
         """
@@ -20,15 +21,11 @@ def V_and_MuY_rho_tanh(model, alpha=1):
         Rho = torch.tanh(U[:, [2]])
         Rho = torch.minimum(Rho, Rho_max)
         Rho = torch.maximum(Rho, Rho_min)
-        RhoP = torch.sqrt(1 - Rho ** 2)
+        RhoP = torch.sqrt(1 - Rho**2)
         MuY = U[:, [3]]
-        V = torch.concat(
-            [
-                SigmaX, zeros,
-                Rho * SigmaY, RhoP * SigmaY
-            ], axis=-1
-        )
+        V = torch.concat([SigmaX, zeros, Rho * SigmaY, RhoP * SigmaY], axis=-1)
         return V, MuY
+
     return V_and_MuY
 
 
@@ -49,22 +46,18 @@ def V_and_MuY_rho_exp(model):
         Rho = torch.tanh(U[:, [2]])
         Rho = torch.minimum(Rho, Rho_max)
         Rho = torch.maximum(Rho, Rho_min)
-        RhoP = torch.sqrt(1 - Rho ** 2)
+        RhoP = torch.sqrt(1 - Rho**2)
         MuY = U[:, [3]]
-        V = torch.concat(
-            [
-                SigmaX, zeros,
-                Rho * SigmaY, RhoP * SigmaY
-            ], axis=-1
-        )
+        V = torch.concat([SigmaX, zeros, Rho * SigmaY, RhoP * SigmaY], axis=-1)
         return V, MuY
+
     return V_and_MuY
 
 
 def V_and_MuY_rho_softplus(model):
     def V_and_MuY(tXY):
         """
-        SigmaX = softplus 
+        SigmaX = softplus
         SigmaY = softplus
         rho = tanh
         muY = muY
@@ -72,18 +65,14 @@ def V_and_MuY_rho_softplus(model):
         batch_size = tXY.shape[0]
         zeros = torch.zeros([batch_size, 1], device="cuda:0")
         U = model["nets"]["phi"](tXY)
-        SigmaX = torch.nn.functional.softplus (U[:, [0]])
-        SigmaY = torch.nn.functional.softplus (U[:, [1]])
+        SigmaX = torch.nn.functional.softplus(U[:, [0]])
+        SigmaY = torch.nn.functional.softplus(U[:, [1]])
         Rho = torch.tanh(U[:, [2]])
         Rho = torch.minimum(Rho, Rho_max)
         Rho = torch.maximum(Rho, Rho_min)
-        RhoP = torch.sqrt(1 - Rho ** 2)
+        RhoP = torch.sqrt(1 - Rho**2)
         MuY = U[:, [3]]
-        V = torch.concat(
-            [
-                SigmaX, zeros,
-                Rho * SigmaY, RhoP * SigmaY
-            ], axis=-1
-        )
+        V = torch.concat([SigmaX, zeros, Rho * SigmaY, RhoP * SigmaY], axis=-1)
         return V, MuY
+
     return V_and_MuY

@@ -29,6 +29,7 @@ def do_lstsq(A, R, method="approx"):
         lstsq = torch.linalg.lstsq(A, R).solution
     return lstsq
 
+
 def compute_VIX2(XY12, R, degree, k="M"):
     if len(XY12.shape) == 3:
         X, Y = XY12[0, :, 0], XY12[0, :, 1]
@@ -42,6 +43,7 @@ def compute_VIX2(XY12, R, degree, k="M"):
     VIX2_lstsq = PSI @ lstsq
     VIX2_lstsq = VIX2_lstsq[VIX2_lstsq > 0]
     return VIX2_lstsq.unsqueeze(-1)
+
 
 def compute_VIX2_nested(gen12, T1, T2, TAU, XY1, sub_batch_size, batch_size_nested, k):
     R_nested = torch.zeros([k, sub_batch_size, 1], device="cuda:0")

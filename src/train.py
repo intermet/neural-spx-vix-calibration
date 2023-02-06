@@ -13,7 +13,7 @@ from train_utils import wrap_loss_func
 from train_utils import prepare_data
 from train_utils import checkpoint_func
 
-parser = argparse.ArgumentParser(prog = 'SPX-VIX joint neural calibration')
+parser = argparse.ArgumentParser(prog="SPX-VIX joint neural calibration")
 parser.add_argument("--date", type=str)
 parser.add_argument("--maturities", type=str)
 parser.add_argument("--model", type=str)

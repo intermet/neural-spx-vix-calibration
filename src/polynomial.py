@@ -2,15 +2,16 @@ import torch
 import orthnet
 
 KINDS = {
-    "C" : orthnet.Chebyshev,
-    "C2" : orthnet.Chebyshev2,
-    "H" : orthnet.Hermite,
-    "H2" : orthnet.Hermite2,
-    "LA" : orthnet.Laguerre,
-    "LE" : orthnet.Legendre,
-    "LEN" : orthnet.Legendre_Normalized,
-    "M" : None
+    "C": orthnet.Chebyshev,
+    "C2": orthnet.Chebyshev2,
+    "H": orthnet.Hermite,
+    "H2": orthnet.Hermite2,
+    "LA": orthnet.Laguerre,
+    "LE": orthnet.Legendre,
+    "LEN": orthnet.Legendre_Normalized,
+    "M": None,
 }
+
 
 def Monomial(XY, degree):
     X, Y = XY[:, 0], XY[:, 1]
@@ -24,6 +25,7 @@ def Monomial(XY, degree):
             P.append(P[k] * P[degree + n - k])
     P = torch.stack(P, axis=-1)
     return P
+
 
 def poly(XY, degree, k="M"):
     if k == "M":
