@@ -9,7 +9,7 @@ python >= 3.6, torch>=1.13.0 and torchsde>=0.2.5
 
 ## Data
 
-Data should be download from the [[Wharton Research Data Service]](https://wrds-www.wharton.upenn.edu/login/?next=/pages/get-data/optionmetrics/ivy-db-us/options/option-prices) and placed in `src/data/csv` under the csv format:
+Data should be download from the [[Wharton Research Data Service Optionmetrics database]](https://wrds-www.wharton.upenn.edu/login/?next=/pages/get-data/optionmetrics/ivy-db-us/options/option-prices) and placed in `src/data/csv` under the csv format:
 ```
 $ ls src/data/csv
 spx_bid_ask.csv
@@ -53,7 +53,30 @@ MODEL = {
     "optimizer" : None
 }
 
-V_AND_MUY = V_and_MuY_rho_tanh
+def V_AND_MUY(model, alpha=1):
+    Rho_min = torch.tensor(-0.99999, device="cuda:0")
+    Rho_max = torch.tensor(+0.99999, device="cuda:0")
+    def V_and_MuY(tXY):
+        batch_size = tXY.shape[0]
+        zeros = torch.zeros([batch_size, 1], device="cuda:0")
+        U = model["nets"]["phi"](tXY)
+        SigmaX = 1 + torch.tanh(U[:, [0]])
+        SigmaY = alpha * (1 + torch.tanh(U[:, [1]]))
+        Rho = U[:, [2]]
+        Rho = torch.tanh(U[:, [2]])
+        Rho = torch.minimum(Rho, Rho_max)
+        Rho = torch.maximum(Rho, Rho_min)
+        RhoP = torch.sqrt(1 - Rho**2)
+        MuY = U[:, [3]]
+        V = torch.concat([SigmaX, zeros, Rho * SigmaY, RhoP * SigmaY], axis=-1)
+        return V, MuY
+
+    return V_and_MuY
+
+```
+A model is given by a dict `MODEL` including a family of neural networks `MODEL["nets"]` and a function `V_AND_MUY` that computes the volatility and the drift of the calibration model as outputs of the neural networks. In the example above, the volatility and the drift are given by
+```latex
+\sigma_X(t, x, y) = 1 + tanh(\Phi(txy))
 ```
 ### `maturities.json`
 ```json
