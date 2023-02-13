@@ -75,9 +75,13 @@ def V_AND_MUY(model, alpha=1):
 
 ```
 A model is given by a dict `MODEL` including a family of neural networks `MODEL["nets"]` and a function `V_AND_MUY` that computes the volatility and the drift of the calibration model as outputs of the neural networks. In the example above, the volatility and the drift are given by
-```latex
-\sigma_X(t, x, y) = 1 + tanh(\Phi(txy))
+```math
+\sigma_X(t, x, y) = 1 + tanh(\Phi_1(txy))
+\sigma_Y(t, x, y) = 1 + tanh(\Phi_2(txy))
+\Rho(t, x, y) = tanh(\Phi_3(txy))
+\MuY(t, x, y) = \Phi_4(txy)
 ```
+where $\Phi = (\Phi_1, \Phi_2, \Phi_3, \Phi_4)$ is the output of neural network `MODEL["nets"]["phi"]`.
 ### `maturities.json`
 ```json
 {
