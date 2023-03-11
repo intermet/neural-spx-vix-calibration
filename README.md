@@ -9,7 +9,7 @@ python >= 3.6, torch>=1.13.0 and torchsde>=0.2.5
 
 ## Data
 
-Data should be download from the [[Wharton Research Data Service Optionmetrics database]](https://wrds-www.wharton.upenn.edu/login/?next=/pages/get-data/optionmetrics/ivy-db-us/options/option-prices) and placed in `src/data/csv` under the csv format:
+Data should be downloaded from the [[Wharton Research Data Service Optionmetrics database]](https://wrds-www.wharton.upenn.edu/login/?next=/pages/get-data/optionmetrics/ivy-db-us/options/option-prices) and placed in `src/data/csv` under the csv format:
 ```
 $ ls src/data/csv
 spx_bid_ask.csv
@@ -35,7 +35,7 @@ python train.py --model my_model.py \
 ```
 
 
-We give below typical example of configuration files.
+We give below a typical example of configuration files.
 ### `my_model.py`
 ```python
 import torch
@@ -76,12 +76,12 @@ def V_AND_MUY(model, alpha=1):
 ```
 A model is given by a dict `MODEL` including a family of neural networks `MODEL["nets"]` and a function `V_AND_MUY` that computes the volatility and the drift of the calibration model as outputs of the neural networks. In the example above, the volatility and the drift are given by
 ```math
-\displaylines{\sigma_X(t, x, y) = 1 + tanh(\Phi_1(txy))\\
-\sigma_Y(t, x, y) = 1 + tanh(\Phi_2(txy))\\
-\rho(t, x, y) = tanh(\Phi_3(txy))\\
+\displaylines{\sigma_X(t, x, y) = 1 + \tanh(\Phi_1(txy))\\
+\sigma_Y(t, x, y) = 1 + \tanh(\Phi_2(txy))\\
+\rho(t, x, y) = \tanh(\Phi_3(txy))\\
 \mu_Y(t, x, y) = \Phi_4(txy)}
 ```
-where $\Phi = (\Phi_1, \Phi_2, \Phi_3, \Phi_4)$ is the output of neural network `MODEL["nets"]["phi"]`.
+where $\Phi = (\Phi_1, \Phi_2, \Phi_3, \Phi_4)$ is the output of the neural network `MODEL["nets"]["phi"]`.
 ### `maturities.json`
 ```json
 {
@@ -118,5 +118,5 @@ where $\Phi = (\Phi_1, \Phi_2, \Phi_3, \Phi_4)$ is the output of neural network 
 
 
 ## References
-\[1\] Julien Guyon, Scander Mustapha. "Neural Joint SPX-VIX calibration" (2022) [[SSRN]](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4309576)
+\[1\] Julien Guyon, Scander Mustapha. "Neural Joint S&P 500/VIX smile calibration" (2022) [[SSRN]](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4309576)
 
